@@ -1,10 +1,10 @@
 const ApiError = require("../api-error")
 const MongoDB = require("../utils/mongodb.util")
 const ProductService = require("../services/product.service")
-
+const uploadImg = require("../controllers/uploadImg.controller")
 exports.create = async (req, res, next) => {
     if (!req.body?.ten) {
-        // console.log()
+        console.log(req)
         return next(new ApiError(400, "ten san pham khong the trong"))
     }
     try {
@@ -31,20 +31,34 @@ exports.findAll = async (req, res, next) => {
     } catch (error) {
         return next(new ApiError(500, "loi"))
     }
+    // console.log(typeof (documents))
     return res.send(documents)
 }
-exports.findOne = (req, res) => {
-    res.send({ message: "findOne handler" })
+
+exports.delete = async (req, res, next) => {
+    try {
+        const productService = new ProductService(MongoDB.client)
+        const document = await productService.delete(req.params.id)
+        if (!document) {
+            return next(new ApiError(404, "san pham da bi xoa"))
+        }
+        return res.send({ message: "san pham da xoa" })
+    }
+    catch (error) {
+        return next(new ApiError(500, "loi"))
+    }
 }
-exports.delete = (req, res) => {
-    res.send({ message: "delete" })
-}
-exports.deleteAll = (req, res) => {
-    res.send({ message: "deleteAll handler" })
-}
-exports.findAllFavorite = (req, res) => {
-    res.send({ message: "findAllFavorite handler" })
+
+exports.findAllFavorite = async (req, res) => {
+    try {
+        const productService = new ProductService(MongoDB.client)
+        const documents = await productService.findFavorite()
+        return res.send(documents)
+    }
+    catch (error) {
+        return next(new ApiError(500, "loi"))
+    }
 }
 exports.update = (req, res) => {
-    res.send({ message: "update handler" })
+
 }

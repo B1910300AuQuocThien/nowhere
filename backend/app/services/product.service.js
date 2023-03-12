@@ -2,7 +2,7 @@ const { ObjectId } = require("mongodb")
 
 class ProductService {
     constructor(client) {
-        this.Product = client.db().collection("phanloai")
+        this.Product = client.db().collection("sanpham")
     }
 
     async createID() {
@@ -10,27 +10,30 @@ class ProductService {
         return result.value
     }
 
-    extractConactDate(payload) {
+    extractConactData(payload) {
+
         const product = {
             ten: payload.ten,
             giahientai: payload.giahientai,
             mota: payload.mota,
             soluong: payload.soluong,
             maphanloai: payload.maphanloai,
-            tennhasx: payload.tennhasx,
             trongluong: payload.trongluong,
-            yeuthich: payload.yeuthich
+            yeuthich: payload.yeuthich,
+            trangthai: payload.trangthai,
+            ngaycapnhat: payload.ngaycapnhat,
+            hinhanh: payload.hinhanh
         }
         Object.keys(product).forEach((key) => { product[key] === undefined && delete product[key] })
         return product
     }
 
     async create(payload) {
-        const product = this.extractConactDate(payload)
+        const product = this.extractConactData(payload)
         const result = await this.Product.findOneAndUpdate(
             product, {
             $set: {
-                yeuthich: product.yeuthich === true
+                yeuthich: product.yeuthich === true,
             },
         },
             { returnDocument: "after", upsert: true }
@@ -47,6 +50,30 @@ class ProductService {
         return await this.find({
             name: { $regex: new RegExp(name), $options: "i" }
         })
+    }
+
+    async update(id, payload) {
+        const filter = {
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null
+        }
+        const update = this.extractConactData(payload)
+        const result = await this.Product.findOneAndUpdate(
+            filter,
+            { $set: update },
+            { returnDocument: "after" }
+        )
+        return result.value
+    }
+
+    async delete(id) {
+        const result = await this.Product.findOneAndDelete({
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null
+        })
+        return result.value
+    }
+
+    async findFavorite() {
+        return await this.find({ yeuthich: true })
     }
 }
 
