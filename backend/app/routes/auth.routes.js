@@ -4,7 +4,7 @@ const callbackRouter = express.Router()
 const passport = require("passport")
 
 router.route("/google").get(passport.authenticate('google', {
-    scope: ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"]
+    scope: ["profile", "email"]
 }))
 
 callbackRouter.route('/google/callback').get(passport.authenticate('google', {

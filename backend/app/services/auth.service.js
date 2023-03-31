@@ -23,26 +23,25 @@ passport.use(new GoogleStratery({
     async function (accessToken, refreshToken, profile, done) {
         const userProfile = profile
 
-        console.log(profile._json)
+        // console.log(profile._json)
         const google = require('googleapis').google
         const OAuth2 = google.auth.OAuth2
         const oauthClient = new OAuth2()
         oauthClient.setCredentials({ access_token: accessToken })
 
-        var oauth2 = google.oauth2({
-            auth: oauthClient,
-            version: 'v2',
-        })
-
-        const data = await oauth2.userinfo.get()
-        console.log(data.data)
-        // const service = google.people({ version: 'v1', auth: oauthClient })
-        // const info = await service.people.get({
-        //     resourceName: `people/${userProfile._json.sub}`,
-        //     personFields: 'genders,birthdays',
-        //     sources: 'READ_SOURCE_TYPE_PROFILE'
+        // var oauth2 = google.oauth2({
+        //     auth: oauthClient,
+        //     version: 'v2',
         // })
-        // console.log(info.data)
+        // const data = await oauth2.userinfo.get()
+        // console.log(data.data)
+        const service = google.people({ version: 'v1', auth: oauthClient })
+        const info = await service.people.get({
+            resourceName: `people/${userProfile._json.sub}`,
+            personFields: 'genders,birthdays,email',
+            sources: 'READ_SOURCE_TYPE_PROFILE'
+        })
+        console.log(info.data)
         // if (userProfile._json.sub) {
         //     try {
         //         const customerService = new CustomerService(MongoDB.client)
