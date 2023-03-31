@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import adminview from '../views/admin/adminview.vue'
 import signup from '../components/signupForm.vue'
 import addProduct from '../views/admin/addProduct.vue'
+import Classify from '../views/admin/classifyView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -11,24 +12,10 @@ const router = createRouter({
       component: adminview
     },
     {
-      path: "/sanpham/xedap",
-      name: "xedap",
-      component: adminview
-    },
-    {
-      path: "/sanpham/phutung",
-      name: "phutung",
-      component: adminview
-    },
-    {
-      path: "/sanpham/khungsuon",
-      name: "khungsuon",
-      component: adminview
-    },
-    {
-      path: "/sanpham/phukien",
-      name: "phukien",
-      component: adminview
+      path: "/sanpham/danhmuc/:id",
+      name: "sanpham",
+      component: adminview,
+      props: true,
     },
     {
       path: "/sanpham/tuychinh",
@@ -43,7 +30,18 @@ const router = createRouter({
     {
       path: "/sanpham/themmoi",
       name: "themmoi",
-      component: addProduct
+      component: addProduct,
+    },
+    // {
+    //   path: "/sanpham/themmoi/danhmuc",
+    //   name: "themoidanhmuc",
+    //   component: Classify
+    // },
+    {
+      path: "/sanpham/themmoi/:id",
+      name: "themmoidanhmuc",
+      component: Classify,
+      props: true
     }
   ]
 })

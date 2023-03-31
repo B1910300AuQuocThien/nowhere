@@ -1,17 +1,22 @@
 import CreateApiClient from "./api.service";
 
 class ProductService {
-    constructor(baseUrl = "/bikeshop") {
+    constructor(baseUrl = "/bikeshop/sanpham") {
         this.product = CreateApiClient(baseUrl)
+    }
+
+    async create(data) {
+        return (await this.product.post("/", data)).data
+    }
+
+    async getProductWithFilter(id) {
+        return (await this.product.get(`/danhmuc/${id}`)).data
     }
 
     async getAll() {
         return (await this.product.get("/")).data
     }
 
-    async create(data) {
-        return (await this.product.post("/", data)).data
-    }
 
     async deleteAll() {
         return (await this.product.delete("/")).data

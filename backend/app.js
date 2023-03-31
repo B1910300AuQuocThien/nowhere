@@ -4,8 +4,15 @@ const ApiError = require("./app/api-error");
 const route = require("./app/routes")
 const app = express();
 const bodyParser = require("body-parser")
+const passport = require("passport")
+const session = require("express-session")
 
-
+app.use(session({
+    resave: false,
+    saveUninitialized: true,
+    secret: "secret"
+}))
+app.use(passport.initialize())
 app.use(bodyParser.json({ limit: '70mb' }));
 app.use(bodyParser.urlencoded({ limit: '70mb', extended: true, parameterLimit: 50000 }));
 app.use(cors());
@@ -13,7 +20,9 @@ app.get("/", (req, res) => {
     res.json({ message: "Welcome to contact book application." });
 });
 
+
 route(app)
+
 
 app.use((req, res, next) => {
     return next(new ApiError(404, "Resource not found"));

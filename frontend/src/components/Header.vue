@@ -16,12 +16,16 @@
         </div>
         <div class="mb-1 row">
             <div class="col-2"></div>
-            <div class="col-6">
-                <router-link :to="{ name: 'xedap' }" tag="button" class="btn btn-dark mr-2">XE ĐẠP</router-link>
-                <router-link :to="{ name: 'phutung' }" tag="button" class="btn btn-dark mr-2">PHỤ TÙNG</router-link>
-                <router-link :to="{ name: 'khungsuon' }" tag="button" class="btn btn-dark mr-2">KHUNG SƯỜN</router-link>
-                <router-link :to="{ name: 'phukien' }" tag="button" class="btn btn-dark mr-2">PHỤ KIỆN</router-link>
-                <router-link :to="{ name: 'tuychinh' }" tag="button" class="btn btn-dark mr-2">TÙY CHỌN</router-link>
+            <div class="col-6 row">
+                <div class="ml-3" v-for="category in categorys">
+                    <router-link :to="{
+                        name: 'sanpham',
+                        params: { id: category.ma }
+                    }" tag="button" class="btn btn-dark ">
+                        {{ category.ten }}
+                    </router-link>
+
+                </div>
             </div>
         </div>
         <hr>
@@ -49,3 +53,10 @@
 }
 </style>
 
+<script>
+export default {
+    props: {
+        categorys: { type: Array, default: [] }
+    }
+}
+</script>

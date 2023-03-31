@@ -9,7 +9,7 @@ var storage = new GridFsStorage({
     url: config.db.uri,
     options: { useNewUrlParser: true, useUnifiedTopology: true },
     file: (req, file) => {
-        console.log(file)
+        // console.log(file)
         const match = ["image/png", "image/jpeg", "image/jpg"]
         if (match.includes(file.mimeType) === -1) {
             const filename = `${Date.now()}--bezoder-${file.originalname}`

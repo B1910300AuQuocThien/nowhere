@@ -28,17 +28,12 @@ export default {
 
     methods: {
         async addProduct(emitPayload) {
-            console.log(emitPayload)
-            try {
-                await ProductService.create(emitPayload.product)
-                console.log("thanh cong")
-            }
-            catch (error) {
-                console.log(error)
-            }
+            console.log(emitPayload.product)
             try {
                 await UploadImgService.create(emitPayload.image)
-                console.log("thanh cong")
+                console.log("them hinh thanh cong")
+                await ProductService.create(emitPayload.product)
+                console.log("them san pham thanh cong")
             }
             catch (error) {
                 console.log(error)

@@ -7,6 +7,12 @@ class Classify {
     async getAll() {
         return (await this.classify.get("/")).data
     }
+    async create(data) {
+        return (await this.classify.post("/", data)).data
+    }
+    async delete(id) {
+        return (await this.classify.delete(`/${id}`)).data
+    }
 }
 
 export default new Classify

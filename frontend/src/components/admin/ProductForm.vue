@@ -30,7 +30,7 @@
 
             <div class="form-group col-3">
                 <label for="ms">Màu Sắc</label>
-                <input name="ms" type="text" class="form-control" v-model="productLocal.mausac" />
+                <input name="ms" type="text" class="form-control" v-model="productLocal.mau" />
             </div>
         </div>
 
@@ -45,39 +45,28 @@
 
             <div class="form-group col-3">
                 <label for="dm" class="form-label">Danh mục</label>
-                <select class="form-select form-select-lg form-control" name="dm" v-model="productLocal.danhmuc">
-                    <option v-for="category in categorys" :value="category.madanhmuc">{{ category.tendanhmuc }}
-                    </option>
-                    <option value="">
-                        <router-link :to="{
-                            name: 'themmoi'
-                        }">Thêm...</router-link>
-                    </option>
-
+                <select class="form-select form-select-lg form-control" name="dm" v-model="productLocal.danhmuc"
+                    v-on:change="changeRoute($event)">
+                    <option v-for="category in categorys" :value="category.ma">{{ category.ten }}</option>
+                    <option value="danhmuc">Thêm...</option>
                 </select>
             </div>
 
             <div class="form-group col-3">
                 <label for="plxe">Phân loại xe</label>
-                <select name="plxe" class="form-select form-select-lg form-control" v-model="productLocal.maphanloai">
-                    <option v-for="classify in classifys" :value="classify.maphanloai">{{ classify.tenphanloai }}</option>
-                    <option value="">
-                        <router-link :to="{
-                            name: 'themmoi'
-                        }">Thêm...</router-link>
-                    </option>
+                <select name="plxe" class="form-select form-select-lg form-control" v-model="productLocal.phanloai"
+                    v-on:change="changeRoute($event)">
+                    <option v-for="classify in classifys" :value="classify.ma">{{ classify.ten }}</option>
+                    <option value="phanloai">Thêm...</option>
                 </select>
             </div>
 
             <div class="form-group col-3">
                 <label for="cl">Chất Liệu</label>
-                <select name="cl" class="form-select form-select-lg form-control" v-model="productLocal.chatlieu">
-                    <option v-for="material in materials" :value="material.machatlieu">{{ material.tenchatlieu }}</option>
-                    <option value="">
-                        <router-link :to="{
-                            name: 'themmoi'
-                        }">Thêm...</router-link>
-                    </option>
+                <select name="cl" class="form-select form-select-lg form-control" v-model="productLocal.chatlieu"
+                    v-on:change="changeRoute($event)">
+                    <option v-for="material in materials" :value="material.ma">{{ material.ten }}</option>
+                    <option value="chatlieu">Thêm... </option>
                 </select>
             </div>
         </div>
@@ -150,7 +139,16 @@ export default {
         handlUploadImg(event) {
             this.image = event.target.files[0]
             // console.log(this.image)
-        }
+        },
+        changeRoute(e) {
+            if (e.target.value == "danhmuc" || e.target.value == "phanloai" || e.target.value == "chatlieu") {
+            }
+            this.$router.push({
+                name: "themmoidanhmuc",
+                params: { id: e.target.value }
+            })
+
+        },
     },
 }
 </script>

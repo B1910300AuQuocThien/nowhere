@@ -3,19 +3,22 @@ const product = require("../controllers/product.controller")
 const router = express.Router()
 
 router.route("/")
-    .get(product.findAll)
+    .get(product.findAll_1)
     .post(product.create)
-    .delete(product.delete)
+    .delete(product.deleteAll)
 
-
-// cai nay de lai
 router.route("/favorite")
     .get(product.findAllFavorite)
 
-// router.route("/:id")
-//     .get(product.findOne)
-//     .put(product.update)
-//     .delete(product.delete)
+router.route("/khoa").get(product.lastRecord)
+
+router.route("/danhmuc/:id").get(product.findAll_2)
+
+router.route("/:id")
+    .get(product.findOne)
+    .put(product.update)
+    .delete(product.delete)
+
 
 
 module.exports = router
