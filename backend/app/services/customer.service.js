@@ -9,7 +9,13 @@ class CustomerService {
         const customer = {
             email: payload.email,
             makh: payload.sub,
-            tenkh: payload.name
+            tenkh: payload.name,
+            gioitinh: payload.genders,
+            ngaysinh: payload.birthdays,
+            sdt: payload.numberphone,
+            madiachi: payload.addressCode,
+            tennguoidung: payload.username,
+            matkhau: payload.password
         }
 
         Object.keys(customer).forEach((key) => {
@@ -25,13 +31,16 @@ class CustomerService {
             customer,
             {
                 $set: {
-                    trangthai: true,
+                    trangthai: "kich hoat",
+                    admin: customer === true
                 }
             },
             { returnDocument: "after", upsert: true })
 
         return result.value
     }
+
+
 }
 
 module.exports = CustomerService

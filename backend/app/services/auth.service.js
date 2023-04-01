@@ -28,30 +28,34 @@ passport.use(new GoogleStratery({
         const OAuth2 = google.auth.OAuth2
         const oauthClient = new OAuth2()
         oauthClient.setCredentials({ access_token: accessToken })
-
-        // var oauth2 = google.oauth2({
-        //     auth: oauthClient,
-        //     version: 'v2',
-        // })
-        // const data = await oauth2.userinfo.get()
-        // console.log(data.data)
         const service = google.people({ version: 'v1', auth: oauthClient })
         const info = await service.people.get({
             resourceName: `people/${userProfile._json.sub}`,
-            personFields: 'genders,birthdays,email',
+            personFields: 'genders,birthdays,phoneNumbers',
             sources: 'READ_SOURCE_TYPE_PROFILE'
         })
-        console.log(info.data)
-        // if (userProfile._json.sub) {
-        //     try {
-        //         const customerService = new CustomerService(MongoDB.client)
-        //         // const document = await customerService.create(userProfile._json)
-        //         console.log("thanh cong")
-        //     }
-        //     catch (error) {
-        //         console.log(error)
-        //     }
-        // }
+        delete info.data.resourceName
+        delete info.data.etag
+        birthdays = ""
+        Object.values(info.data.birthdays[0].date).forEach((value) => {
+            birthdays += value + "-"
+        })
+        birthdays = birthdays.slice(0, -1)
+
+        console.log(birthdays)
+        profile._json.genders = info.data.genders[0].value
+        profile._json.birthdays = birthdays
+        console.log(profile)
+        if (userProfile._json.sub) {
+            try {
+                const customerService = new CustomerService(MongoDB.client)
+                const document = await customerService.create(userProfile._json)
+                console.log(document)
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }
         return done(null, userProfile)
     })
 )
