@@ -32,11 +32,9 @@ class ProductService {
     async getImgId() {
         const uploadService = new UploadService(MongoDB.client)
         return await uploadService.getLastestImg()
-
     }
 
     async create(payload) {
-        // console.log(this.getImgId())
         const product = this.extractConactData(payload)
         const idImg = await this.getImgId()
         console.log(idImg)
@@ -45,7 +43,9 @@ class ProductService {
             {
                 $set: {
                     yeuthich: product.yeuthich === true,
-                    hinhanh: idImg[0]._id
+                    hinhanh: idImg[0]._id,
+                    masp: `product_${Date.now()}`,
+                    ngaycapnhat: new Date().toJSON()
                 },
             },
             { returnDocument: "after", upsert: true }
@@ -89,9 +89,9 @@ class ProductService {
 
             {
                 $lookup: {
-                    from: "hinhsp.files",
+                    from: "hinhsp.chunks",
                     localField: "hinhanh",
-                    foreignField: "_id",
+                    foreignField: "files_id",
                     as: "hinhanh"
                 }
             }
@@ -155,9 +155,51 @@ class ProductService {
     }
 
     async findById(id) {
-        return await this.Product.findOne({
-            _id: ObjectId.isValid(id) ? new ObjectId(id) : null
-        })
+        const cursor = await this.Product.aggregate([
+            {
+                $match: {
+                    masp: id
+                }
+            },
+
+            {
+                $lookup: {
+                    from: "danhmuc",
+                    localField: "danhmuc",
+                    foreignField: "ma",
+                    as: "danhmuc"
+                },
+            },
+
+            {
+                $lookup: {
+                    from: "phanloai",
+                    localField: "phanloai",
+                    foreignField: "ma",
+                    as: "phanloai"
+                },
+            },
+
+            {
+                $lookup: {
+                    from: "chatlieu",
+                    localField: "chatlieu",
+                    foreignField: "ma",
+                    as: "chatlieu"
+                }
+            },
+
+            {
+                $lookup: {
+                    from: "hinhsp.chunks",
+                    localField: "hinhanh",
+                    foreignField: "files_id",
+                    as: "hinhanh"
+                }
+            }
+        ])
+
+        return await cursor.toArray()
     }
 
     async update(id, payload) {

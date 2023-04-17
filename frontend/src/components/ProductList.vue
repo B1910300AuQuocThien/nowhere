@@ -9,10 +9,10 @@ export default {
         deleteProduct(_id) {
             this.$emit("delete:productId", { id: _id })
         },
-
-
     },
+
 }
+
 </script>
 
 <template>

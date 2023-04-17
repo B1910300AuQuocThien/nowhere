@@ -1,7 +1,6 @@
 const ApiError = require("../api-error")
 const MongoDB = require("../utils/mongodb.util")
 const ProductService = require("../services/product.service")
-const uploadImg = require("../controllers/uploadImg.controller")
 
 
 exports.lastRecord = async (req, res, next) => {
@@ -33,7 +32,7 @@ exports.findAll_1 = async (req, res, next) => {
     let document = []
     try {
         const productService = new ProductService(MongoDB.client)
-        document = await productService.findRe({})
+        document = await productService.showProductInfor()
     } catch (error) {
         return next(new ApiError(500, "co loi roi"))
     }

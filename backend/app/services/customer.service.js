@@ -40,7 +40,12 @@ class CustomerService {
         return result.value
     }
 
+    async existCustomer(filter) {
+        return await this.Customer.findOne(
+            { email: filter }
+        )
 
+    }
 }
 
 module.exports = CustomerService
