@@ -8,7 +8,7 @@ export default {
   },
   data() {
     return {
-      categorys: []
+      categorys: [],
     }
   },
 
@@ -16,11 +16,13 @@ export default {
     async getCategory() {
       try {
         this.categorys = await categoryService.getAll()
+        console.log(this.categorys)
       }
       catch (error) {
         console.log(error)
       }
-    }
+    },
+
   },
 
   mounted() {

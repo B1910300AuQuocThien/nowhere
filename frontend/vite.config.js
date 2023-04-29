@@ -15,7 +15,7 @@ export default defineConfig({
     port: 3001,
     proxy: {
       "/bikeshop": {
-        target: "http://localhost:3000/",
+        target: "http://localhost:3002/",
         changeOrigin: true
       }
     }

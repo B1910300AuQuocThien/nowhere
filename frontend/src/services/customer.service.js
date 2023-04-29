@@ -9,9 +9,16 @@ class CustomerService {
         return (await this.customer.get(`/${email}`)).data
     }
 
-    async create(account, customer, address) {
-
+    async create(account, detail) {
+        const data = Object.assign(account, detail)
+        console.log(data)
         return (await this.customer.post("/", data)).data
+    }
+
+    async login(email, pass) {
+        const data = { 'email': email, 'pass': pass }
+        console.log(data)
+        return (await this.customer.post("/dangnhap", data)).data
     }
 }
 

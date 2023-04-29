@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ProductDetail :product="product" />
+        <ProductDetail :products="returnProduct" :quantity="quantity" @addtoCard:productID="addToCart" />
     </div>
 </template>
 
@@ -13,18 +13,35 @@ export default {
     },
     data() {
         return {
-            product: null
+            product: {},
+            quantity: {}
         }
     },
     methods: {
-        addToCart(id) {
-            this.$emit("addtocart:productId", { id: id })
+        addToCart(emitPayload) {
+            console.log(emitPayload)
+
+            var user = this.$cookies.get('user')
+
+            if (user == null) {
+                this.$router.push({ name: 'dangnhap' })
+            }
+            var cartKey = `cart_${user[0].makh}`
+            var carItem = this.$cookies.get(cartKey)
+            if (!carItem) {
+                var carItem = []
+                carItem.push(emitPayload)
+                this.$cookies.set(cartKey, carItem)
+            } else {
+                carItem.push(emitPayload)
+                this.$cookies.set(cartKey, carItem)
+            }
+            console.log(this.$cookies.get(cartKey))
         },
 
         async getProduct() {
             try {
                 this.product = await productService.get(this.$route.params.id)
-                console.log(this.$route.params.id)
             }
             catch (error) {
                 console.log(error);
@@ -37,6 +54,11 @@ export default {
     },
     mounted() {
         this.refreshList()
+    },
+    computed: {
+        returnProduct() {
+            return this.product[0]
+        }
     }
 }
 </script>

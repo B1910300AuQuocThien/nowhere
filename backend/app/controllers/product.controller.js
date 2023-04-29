@@ -48,9 +48,7 @@ exports.findAll_2 = async (req, res, next) => {
             documents = await productService.findByName(name)
         }
         else {
-            // documents = await productService.showProductInfor({})
             documents = await productService.showProductInforWthFilter(req.params.id)
-            // console.log(documents)
         }
 
     } catch (error) {
@@ -111,4 +109,15 @@ exports.findOne = async (req, res, next) => {
 
 exports.update = (req, res) => {
 
+}
+
+exports.count = async (req, res, next) => {
+    try {
+        const productService = new ProductService(MongoDB.client)
+        const result = await productService.countRecord({})
+        return res.send({ count: result })
+    } catch (error) {
+        console.log(error)
+        return next(new ApiError(500, 'loi'))
+    }
 }

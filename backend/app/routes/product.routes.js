@@ -7,6 +7,8 @@ router.route("/")
     .post(product.create)
     .delete(product.deleteAll)
 
+router.route('/soluong').get(product.count)
+
 router.route("/favorite")
     .get(product.findAllFavorite)
 

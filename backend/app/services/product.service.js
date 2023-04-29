@@ -24,6 +24,7 @@ class ProductService {
             mota: payload.mota,
             yeuthich: payload.yeuthich,
             ngaycapnhat: payload.ngaycapnhat,
+            masp: payload.masp
         }
         Object.keys(product).forEach((key) => { product[key] === undefined && delete product[key] })
         return product
@@ -34,7 +35,9 @@ class ProductService {
         return await uploadService.getLastestImg()
     }
 
+
     async create(payload) {
+        const materialDetailKey = await this.countRecord({})
         const product = this.extractConactData(payload)
         const idImg = await this.getImgId()
         console.log(idImg)
@@ -44,8 +47,9 @@ class ProductService {
                 $set: {
                     yeuthich: product.yeuthich === true,
                     hinhanh: idImg[0]._id,
-                    masp: `product_${Date.now()}`,
-                    ngaycapnhat: new Date().toJSON()
+                    ngaycapnhat: new Date().toJSON(),
+                    machitiet: `product_${materialDetailKey + 1}`,
+                    masp: `product_${Date.now()}`
                 },
             },
             { returnDocument: "after", upsert: true }
@@ -71,30 +75,62 @@ class ProductService {
 
             {
                 $lookup: {
-                    from: "phanloai",
-                    localField: "phanloai",
-                    foreignField: "ma",
-                    as: "phanloai"
-                }
-            },
-
-            {
-                $lookup: {
-                    from: "chatlieu",
-                    localField: "chatlieu",
-                    foreignField: "ma",
-                    as: "chatlieu"
-                }
-            },
-
-            {
-                $lookup: {
                     from: "hinhsp.chunks",
                     localField: "hinhanh",
                     foreignField: "files_id",
                     as: "hinhanh"
                 }
-            }
+            },
+
+            {
+                $lookup: {
+                    from: 'chitietchatlieu',
+                    let: { "ma_chitiet": "$machitiet" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $eq: ["$masp", "$$ma_chitiet"]
+                                }
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'phanloai',
+                                let: { "ma_phanloai": "$phanloai" },
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $eq: ["$ma", "$$ma_phanloai"]
+                                            }
+                                        }
+                                    }
+                                ],
+                                as: 'phanloai'
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: 'chatlieu',
+                                let: { "ma_chatlieu": "$tenchatlieu" },
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $eq: ["$ma", "$$ma_chatlieu"]
+                                            }
+                                        }
+                                    }
+                                ],
+                                as: 'chatlieu'
+                            }
+                        }
+                        // { $unwind: "$phanloai" }
+                    ],
+                    as: "chitiet"
+                },
+            },
         ])
 
         return cursor.toArray()
@@ -119,20 +155,51 @@ class ProductService {
 
             {
                 $lookup: {
-                    from: "phanloai",
-                    localField: "phanloai",
-                    foreignField: "ma",
-                    as: "phanloai"
+                    from: 'chitietchatlieu',
+                    let: { "ma_chitiet": "$machitiet" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $eq: ["$masp", "$$ma_chitiet"]
+                                }
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'phanloai',
+                                let: { "ma_phanloai": "$phanloai" },
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $eq: ["$ma", "$$ma_phanloai"]
+                                            }
+                                        }
+                                    }
+                                ],
+                                as: 'phanloai'
+                            }
+                        }, {
+                            $lookup: {
+                                from: 'chatlieu',
+                                let: { "ma_chatlieu": "$tenchatlieu" },
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $eq: ["$ma", "$$ma_chatlieu"]
+                                            }
+                                        }
+                                    }
+                                ],
+                                as: 'chatlieu'
+                            }
+                        }
+                        // { $unwind: "$phanloai" }
+                    ],
+                    as: "chitiet"
                 },
-            },
-
-            {
-                $lookup: {
-                    from: "chatlieu",
-                    localField: "chatlieu",
-                    foreignField: "ma",
-                    as: "chatlieu"
-                }
             },
 
             {
@@ -173,30 +240,61 @@ class ProductService {
 
             {
                 $lookup: {
-                    from: "phanloai",
-                    localField: "phanloai",
-                    foreignField: "ma",
-                    as: "phanloai"
-                },
-            },
-
-            {
-                $lookup: {
-                    from: "chatlieu",
-                    localField: "chatlieu",
-                    foreignField: "ma",
-                    as: "chatlieu"
-                }
-            },
-
-            {
-                $lookup: {
                     from: "hinhsp.chunks",
                     localField: "hinhanh",
                     foreignField: "files_id",
                     as: "hinhanh"
                 }
-            }
+            },
+            {
+                $lookup: {
+                    from: 'chitietchatlieu',
+                    let: { "ma_chitiet": "$machitiet" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $eq: ["$masp", "$$ma_chitiet"]
+                                }
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'phanloai',
+                                let: { "ma_phanloai": "$phanloai" },
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $eq: ["$ma", "$$ma_phanloai"]
+                                            }
+                                        }
+                                    },
+                                ],
+                                as: 'phanloai'
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'chatlieu',
+                                let: { "ma_chatlieu": "$tenchatlieu" },
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $eq: ["$ma", "$$ma_chatlieu"]
+                                            }
+                                        }
+                                    }
+                                ],
+                                as: 'chatlieu'
+                            }
+                        }
+                        // { $unwind: "$phanloai" }
+                    ],
+                    as: "chitiet"
+                },
+            },
         ])
 
         return await cursor.toArray()
@@ -229,6 +327,10 @@ class ProductService {
             _id: ObjectId.isValid(id) ? new ObjectId(id) : null
         })
         return result.value
+    }
+
+    async countRecord() {
+        return await this.Product.countDocuments({})
     }
 }
 

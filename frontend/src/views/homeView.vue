@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Home from '../components/home.vue'
+import Home from '../components/Home.vue'
 import productService from '../services/product.service';
 export default {
     components: {
@@ -20,7 +20,6 @@ export default {
         async retrieveProduct() {
             try {
                 this.product = await productService.getAll()
-                // this.refreshList()
             }
             catch (error) {
                 console.log(error)
@@ -35,7 +34,7 @@ export default {
     },
     computed: {
         returnProduct() {
-            console.log(this.product)
+            // console.log(this.product)
             return this.product
         }
     }

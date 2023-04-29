@@ -6,7 +6,7 @@
 <script>
 import SignupForm from '../components/signupForm.vue';
 import CustomerService from '../services/customer.service'
-
+import AddressService from '../services/address.service';
 export default {
     components: {
         SignupForm
@@ -22,24 +22,24 @@ export default {
 
     methods: {
         async checkExitsAccount(emitPayload) {
-            const result = await CustomerService.checkExitsAcc(emitPayload.gmail)
-            console.log(result.exitsAcc)
+            const result = await CustomerService.checkExitsAcc(emitPayload.email)
+            console.log(result)
+            return result.exitsAcc
         },
 
         async addCustomer(emitPayload) {
-            console.log(emitPayload)
-            if (!this.checkExitsAccount(emitPayload.account.gmail)) {
+            if (this.checkExitsAccount(emitPayload.account.gmail) == false) {
                 try {
-
-                    console.log(emitPayload.accountDetail)
-                    await CustomerService.create(emitPayload.accountDetail)
+                    await AddressService.create(emitPayload.address)
+                    await CustomerService.create(emitPayload.account, emitPayload.customerDetail)
                 }
                 catch (error) {
                     console.log(error)
                 }
             }
-            // console.log(emitPayload.customerDetail)
         }
+
+
     }
 
 }

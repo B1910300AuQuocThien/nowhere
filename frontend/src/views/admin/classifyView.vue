@@ -89,7 +89,7 @@ export default {
                         await classifyService.delete(id)
                     }
                     else {
-                        if (value = "chatlieu") {
+                        if (value == "chatlieu") {
                             await materialService.delete(id)
                         }
                     }

@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongodb")
-
+const AddressService = require("../services/address.service")
+const MongoDB = require("../utils/mongodb.util")
 class CustomerService {
     constructor(client) {
         this.Customer = client.db().collection("khachhang")
@@ -25,14 +26,22 @@ class CustomerService {
         return customer
     }
 
+    async addCode() {
+        const addService = new AddressService(MongoDB.client)
+        const document = await addService.lastRecord()
+        return document[0].madiachi
+    }
+
     async create(payload) {
         const customer = this.extracConnactData(payload)
+        const add = await this.addCode()
         const result = await this.Customer.findOneAndUpdate(
             customer,
             {
                 $set: {
                     trangthai: "kich hoat",
-                    admin: customer === true
+                    admin: false,
+                    madiachi: add
                 }
             },
             { returnDocument: "after", upsert: true })
@@ -41,10 +50,22 @@ class CustomerService {
     }
 
     async existCustomer(filter) {
-        return await this.Customer.findOne(
-            { email: filter }
-        )
+        const cursor = await this.Customer.aggregate([
+            {
+                $match: { email: filter }
+            }
+        ])
+        return await cursor.toArray()
+    }
 
+    async login(email, pass) {
+        const result = await this.Customer.aggregate([
+            {
+                $match: { $and: [{ email: email }, { matkhau: pass }] }
+            }
+        ])
+
+        return await result.toArray()
     }
 }
 

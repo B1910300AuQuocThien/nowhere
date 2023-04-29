@@ -4,7 +4,9 @@ const uploadRoute = require("./upload.route")
 const classifyRoute = require("./classify.route")
 const materialRoute = require("./material.route")
 const customerRoute = require("./customer.route")
+const addressRoute = require("./address.route")
 const auth = require("./auth.routes")
+const materialDetail = require('./materialDetail.route')
 
 function route(app) {
     app.use('/bikeshop/sanpham', productRoute)
@@ -15,5 +17,7 @@ function route(app) {
     app.use('/bikeshop/auth', auth.router)
     app.use('/auth', auth.callbackRouter)
     app.use('/bikeshop/khachhang', customerRoute)
+    app.use('/bikeshop/diachi', addressRoute)
+    app.use('/bikeshop/chitietchatlieu', materialDetail)
 }
 module.exports = route
