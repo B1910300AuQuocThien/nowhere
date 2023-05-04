@@ -7,6 +7,7 @@ const customerRoute = require("./customer.route")
 const addressRoute = require("./address.route")
 const auth = require("./auth.routes")
 const materialDetail = require('./materialDetail.route')
+const orderRoute = require('./order.route')
 
 function route(app) {
     app.use('/bikeshop/sanpham', productRoute)
@@ -19,5 +20,6 @@ function route(app) {
     app.use('/bikeshop/khachhang', customerRoute)
     app.use('/bikeshop/diachi', addressRoute)
     app.use('/bikeshop/chitietchatlieu', materialDetail)
+    app.use('/bikeshop/donhang', orderRoute)
 }
 module.exports = route

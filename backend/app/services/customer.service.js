@@ -26,22 +26,14 @@ class CustomerService {
         return customer
     }
 
-    async addCode() {
-        const addService = new AddressService(MongoDB.client)
-        const document = await addService.lastRecord()
-        return document[0].madiachi
-    }
-
     async create(payload) {
         const customer = this.extracConnactData(payload)
-        const add = await this.addCode()
         const result = await this.Customer.findOneAndUpdate(
             customer,
             {
                 $set: {
                     trangthai: "kich hoat",
                     admin: false,
-                    madiachi: add
                 }
             },
             { returnDocument: "after", upsert: true })
@@ -53,7 +45,15 @@ class CustomerService {
         const cursor = await this.Customer.aggregate([
             {
                 $match: { email: filter }
-            }
+            },
+            {
+                $lookup: {
+                    from: 'chitietdiachi',
+                    localField: 'email',
+                    foreignField: 'makh',
+                    as: 'diachi'
+                }
+            },
         ])
         return await cursor.toArray()
     }
@@ -62,10 +62,24 @@ class CustomerService {
         const result = await this.Customer.aggregate([
             {
                 $match: { $and: [{ email: email }, { matkhau: pass }] }
-            }
+            },
+            {
+                $lookup: {
+                    from: 'chitietdiachi',
+                    localField: 'email',
+                    foreignField: 'makh',
+                    as: 'diachi'
+                }
+            },
+
         ])
 
         return await result.toArray()
+    }
+
+    async lastRecord() {
+        const cursor = await this.Customer.find().sort({ _id: -1 }).limit(1)
+        return await cursor.toArray()
     }
 }
 

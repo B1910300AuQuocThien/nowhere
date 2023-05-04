@@ -23,7 +23,7 @@ export default {
             this.updateIndex()
         },
         addToCart() {
-            this.$emit("addtoCard:productID", { id: this.products.masp, detail: this.detail, quantity: this.quantityLocal })
+            this.$emit("addtoCard:productID", { id: this.products.masp, ten: this.products.ten, detail: this.detail, quantity: this.quantityLocal, })
         }
     },
 }

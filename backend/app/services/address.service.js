@@ -1,13 +1,15 @@
 const { ObjectId } = require("mongodb")
-const MongoDB = require("../utils/mongodb.util")
-
+const CustomerController = require('../controllers/customer.controller')
 class AddressService {
     constructor(client) {
-        this.Address = client.db().collection("diachi")
+        this.AddressDetail = client.db().collection("chitietdiachi")
+        this.Address = client.db().collection('diachi')
+
     }
 
     extractConactData(payload) {
         const address = {
+            makh: payload.makh,
             capmot: payload.tinh,
             caphai: payload.huyen,
             capba: payload.xa
@@ -20,14 +22,18 @@ class AddressService {
         return address
     }
 
+    async lastCustomer() {
+        return CustomerController.lastRe_2()
+    }
+
     async create(payload) {
         const address = this.extractConactData(payload)
-        const result = await this.Address.findOneAndUpdate(
+        const user = await this.lastCustomer()
+        console.log(user)
+        const result = await this.AddressDetail.findOneAndUpdate(
             address,
             {
-                $set: {
-                    madiachi: `add_${Date.now()}`
-                }
+                $set: { makh: user[0].email }
             },
             { returnDocument: "after", upsert: true }
         )
@@ -35,7 +41,28 @@ class AddressService {
     }
 
     async lastRecord() {
-        const cursor = await this.Address.find().sort({ _id: -1 }).limit(1)
+        const cursor = await this.AddressDetail.find().sort({ _id: -1 }).limit(1)
+        return await cursor.toArray()
+    }
+
+
+    async findByUser(email) {
+        const cursor = await this.AddressDetail.aggregate([
+            {
+                $match: {
+                    $and: [{ makh: email }]
+                }
+            }]
+        )
+
+        return cursor.toArray()
+    }
+
+    async toString(a) {
+        var cursor = await this.Address.aggregate([
+            { $match: { $and: [{ Id: a }] } }
+        ])
+
         return await cursor.toArray()
     }
 }

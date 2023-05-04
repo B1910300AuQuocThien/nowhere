@@ -5,14 +5,22 @@
         <div class="col-4 mx-auto d-flex justify-content-around tool-bar">
             <button class="btn btn-dark" @click="refreshList()">LÀM MỚI</button>
             <router-link :to="{
-                name: 'themmoi'
-            }">
+                    name: 'themmoi'
+                }">
                 <button class="btn btn-dark">THÊM MỚI</button>
             </router-link>
             <button class="btn btn-dark" @click="removeAllProducts">XÓA TẤT CẢ</button>
         </div>
     </div>
 </template>
+
+<style>
+.adminpanel {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+}
+</style>
 
 <script>
 import Header from '../../components/Header.vue';

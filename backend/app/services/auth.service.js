@@ -5,7 +5,7 @@ const keys = require("../../key")
 const MongoDB = require('../utils/mongodb.util')
 const CustomerService = require("../services/customer.service")
 const session = require('express-session')
-const CustomerController = require('../controllers/customer.controller')
+// const CustomerController = require('../controllers/customer.controller')
 // import { google } from "googleapis"
 
 

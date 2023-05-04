@@ -7,7 +7,8 @@ exports.findByEmail = async (req, res, next) => {
     try {
         const customerService = new CustomerService(MongoDB.client)
         const document = await customerService.existCustomer(req.params.email)
-        document[0] ? res.send({ exitsAcc: true }) : res.send({ exitsAcc: false })
+        // document[0] ? res.send({ exitsAcc: true }) : res.send({ exitsAcc: false })
+        res.send(document)
     }
     catch (error) {
         return next(new ApiError(500, "loai"))
@@ -34,9 +35,26 @@ exports.login = async (req, res, next) => {
         const session = req.session
         session.userid = document[0].makh
         session.username = document[0].tenkh
-        console.log(req.session)
+        // console.log(req.session)
         return res.send(document)
     } catch (error) {
         return next(new ApiError(500, "loi rui kia"))
     }
+}
+
+exports.lastRe = async (req, res, next) => {
+    try {
+        const customerService = new CustomerService(MongoDB.client)
+        const document = await customerService.lastRecord()
+        return res.send(document)
+    } catch (e) { return next(new ApiError(500, "loi")) }
+}
+
+
+exports.lastRe_2 = async () => {
+    try {
+        const customerService = new CustomerService(MongoDB.client)
+        const document = await customerService.lastRecord()
+        return document
+    } catch (e) { return next(new ApiError(500, "loi")) }
 }

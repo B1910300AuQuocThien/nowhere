@@ -26,7 +26,7 @@
                         <i class="fab fa-facebook me-2 mt-1"></i>
                         Facebook
                     </a>
-                    <a class="btn btn-primary col-5" style="background-color: #dd4b39;" role="button">
+                    <a @click="signupGoogle" class="btn btn-primary col-5" style="background-color: #dd4b39;" role="button">
                         <i class="fab fa-google me-2 mt-1"></i>
                         Gmail
                     </a>
@@ -64,18 +64,24 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="form-group col-4">
-                            <label class="form-label">Thành Phố</label>
-                            <input class="form-control" type="text" v-model="addressLocal.tinh">
+                            <select class="form-select form-select-lg form-control mb-3" id="city"
+                                v-model="addressLocal.tinh">
+                                <option value="">Tỉnh Thành</option>
+                            </select>
                         </div>
 
                         <div class="form-group col-4">
-                            <label class="form-label">Quận / Huyện</label>
-                            <input class="form-control" type="text" v-model="addressLocal.huyen">
+                            <select class="form-select form-select-lg form-control mb-3" id="districts"
+                                v-model="addressLocal.huyen">
+                                <option value="">Quận Huyện</option>
+                            </select>
                         </div>
 
                         <div class="form-group col-4">
-                            <label class="form-label">Xã / Phường</label>
-                            <input class="form-control" type="text" v-model="addressLocal.xa">
+                            <select class="form-select form-select-lg form-control mb-3" id="wards"
+                                v-model="addressLocal.xa">
+                                <option value="">Xã Phường</option>
+                            </select>
                         </div>
 
                     </div>
@@ -92,7 +98,10 @@
 <style scoped src="../assets/css/signup.css"></style>
 
 <script >
+
 import { Form } from 'vee-validate'
+import axios from 'axios';
+
 export default {
     components: {
         Form,
@@ -108,28 +117,34 @@ export default {
         return {
             customerLocal: this.customer,
             addressLocal: this.address,
-            accountLocal: this.account
+            accountLocal: this.account,
+            google: true
         }
     },
 
-    emits: ["submit:account", "submit:customer"],
+    emits: ["submit:account", "submit:customer", "signup:google"],
 
     methods: {
         async checkAcc() {
-            if (this.accountLocal.matkhau === this.accountLocal.retryPassword) {
-                this.$emit("submit:account", this.accountLocal)
+            if (this.accountLocal.password === this.accountLocal.retryPassword) {
+                this.$emit("submit:account", { account: this.accountLocal })
             }
         },
 
         async submitCus() {
             // console.log(this.addressLocal)
             this.$emit("submit:customer", { account: this.accountLocal, customerDetail: this.customerLocal, address: this.addressLocal })
+        },
+
+        signupGoogle() {
+            console.log(this.google)
+            this.$emit("signup:google", this.google)
         }
     },
     mounted() {
 
         var date = document.getElementsByName("age")[0];
-        console.log(date)
+        // console.log(date)
         function checkValue(str, max) {
             if (str.charAt(0) !== "0" || str == "00") {
                 var num = parseInt(str);
@@ -188,6 +203,51 @@ export default {
 
         date.addEventListener("input", func_1);
         date.addEventListener("blur", func_2);
+
+
+        var citis = document.getElementById("city");
+        var districts = document.getElementById("districts");
+        var wards = document.getElementById("wards");
+        var Parameter = {
+            url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+            method: "GET",
+            // responseType: "application/json",
+        };
+        var promise = axios(Parameter);
+        promise.then(function (result) {
+            // console.log(result)
+            renderCity(result.data);
+        });
+
+        function renderCity(data) {
+            for (const x of data) {
+                citis.options[citis.options.length] = new Option(x.Name, x.Id);
+            }
+
+            citis.onchange = function () {
+                districts.length = 1;
+                wards.length = 1;
+                if (this.value != "") {
+                    const result = data.filter(n => n.Id === this.value);
+
+                    for (const k of result[0].Districts) {
+                        districts.options[districts.options.length] = new Option(k.Name, k.Id);
+                    }
+                }
+            };
+
+            districts.onchange = function () {
+                wards.length = 1;
+                const dataCity = data.filter((n) => n.Id === citis.value);
+                if (this.value != "") {
+                    const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
+
+                    for (const w of dataWards) {
+                        wards.options[wards.options.length] = new Option(w.Name, w.Id);
+                    }
+                }
+            };
+        }
     }
 
 }

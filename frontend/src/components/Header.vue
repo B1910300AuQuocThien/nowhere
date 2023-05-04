@@ -42,7 +42,9 @@
                     <router-link :to="{ name: 'giohang' }" tag="button" class="btn btn-dark ml-3">
                         Giỏ Hàng
                     </router-link>
-                    <button class="btn btn-dark ml-3">Đơn Hàng</button>
+                    <router-link :to="{ name: 'donhang' }" tag="button" class="btn btn-dark ml-3">
+                        Đơn Hàng
+                    </router-link>
                 </div>
             </div>
         </div>
@@ -82,9 +84,9 @@ export default {
         }
     },
     methods: {
-        logout() {
+        async logout() {
             this.$cookies.remove('user')
-            // this.$router.push({ name: 'dangnhap' })
+            await this.$router.push({ name: 'dangnhap' })
             location.reload()
         },
         getUserInfo() {
@@ -98,5 +100,7 @@ export default {
             return this.user
         }
     },
+
+
 }
 </script>

@@ -45,6 +45,7 @@ export default {
                     <td class="col-2">
                         <img :src="`data:jpg;base64,${product.hinhanh[0].data}`" alt="" class="img-fluid"
                             style="height: 50px; width: 100%;">
+                        <!-- <img :src="`${product.hinhanh}`"> -->
                         <!-- {{ product.hinhanh[0].data }} -->
                     </td>
                     <td class="">{{ product.ten }}</td>

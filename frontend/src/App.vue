@@ -1,5 +1,4 @@
 <script>
-import adminview from './views/admin/adminview.vue';
 import Header from './components/Header.vue';
 import categoryService from './services/category.service';
 export default {

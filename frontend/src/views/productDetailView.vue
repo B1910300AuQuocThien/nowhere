@@ -19,7 +19,6 @@ export default {
     },
     methods: {
         addToCart(emitPayload) {
-            console.log(emitPayload)
 
             var user = this.$cookies.get('user')
 
@@ -33,10 +32,34 @@ export default {
                 carItem.push(emitPayload)
                 this.$cookies.set(cartKey, carItem)
             } else {
-                carItem.push(emitPayload)
-                this.$cookies.set(cartKey, carItem)
+                const idDetail = emitPayload.detail.machitiet
+                const quantityDetail = emitPayload.quantity.quanity
+
+                if (this.exitsProduct(idDetail, cartKey)) {
+                    carItem.map((e) => {
+                        if (idDetail == e.detail.machitiet) {
+                            e.quantity.quanity = e.quantity.quanity + quantityDetail
+                        }
+                    })
+                    this.$cookies.set(cartKey, carItem)
+                }
+                else {
+                    carItem.push(emitPayload)
+                    this.$cookies.set(cartKey, carItem)
+                }
             }
             console.log(this.$cookies.get(cartKey))
+        },
+
+        exitsProduct(idDetail, cartKey) {
+            var carItem = this.$cookies.get(cartKey)
+            var flag = false
+            carItem.map((cart) => {
+                if (cart.detail.machitiet == idDetail) {
+                    flag = true
+                }
+            })
+            return flag
         },
 
         async getProduct() {

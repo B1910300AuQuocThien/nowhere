@@ -2,7 +2,6 @@
 import { Form } from 'vee-validate'
 import { getGoogleUrl } from '../utils/getGoogleUrl'
 import axios from 'axios'
-import AuthService from '../services/auth.service'
 export default {
     components: { Form, getGoogleUrl },
     props: {
@@ -12,22 +11,17 @@ export default {
         return {
             accountLocal: this.account,
             from: '/',
-            user: {}
+            user: {},
+            google: true
         }
     },
-    emits: ["submit:account"],
+    emits: ["submit:account", "submit:google"],
     methods: {
         login() {
             this.$emit("submit:account", this.accountLocal)
         },
-        async loginGoogle() {
-            await axios.get(getGoogleUrl(this.from)).then(
-                response => {
-                    this.user = response.data
-                    console.log(this.user)
-                }).catch(err => {
-                    console.log(err)
-                })
+        loginGoogle() {
+            this.$emit("submit:google", this.google)
         },
         reloadWin() {
             location.reload()

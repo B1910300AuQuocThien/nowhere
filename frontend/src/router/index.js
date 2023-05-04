@@ -8,6 +8,12 @@ import productdetail from '../views/ProductDetailView.vue'
 import signin from '../views/SigninView.vue'
 import productFilter from '../views/ProductFilterView.vue'
 import cart from '../views/CartView.vue'
+import order from '../views/OrderView.vue'
+import confirm from '../views/orderStatus/WaitingConfirm.vue'
+import waitingProduct from '../views/orderStatus/waitingProduct.vue'
+import tranport from '../views/orderStatus/Delivery.vue'
+import success from '../views/orderStatus/Success.vue'
+import confirmForm from '../views/ConfirmFormView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +34,35 @@ const router = createRouter({
       path: "/giohang",
       name: "giohang",
       component: cart
+    },
+
+    {
+      path: '/giohang/xacnhan',
+      name: 'xacnhan',
+      component: confirmForm
+    },
+    {
+      path: "/donhang",
+      name: "donhang",
+      component: order,
+      children: [
+        {
+          path: "/donhang/choxacnhan",
+          component: confirm
+        },
+        {
+          path: "/donhang/cholayhang",
+          component: waitingProduct
+        },
+        {
+          path: "/donhang/dangvanchuyen",
+          component: tranport
+        },
+        {
+          path: "/donhang/thanhcong",
+          component: success
+        }
+      ]
     },
     {
       path: "/nowhere/trangchu/sanpham/:id",
@@ -84,7 +119,10 @@ const router = createRouter({
       component: classify,
       props: true
     },
-
+    // {
+    //   path: "/mai",
+    //   component: mai
+    // }
   ]
 })
 

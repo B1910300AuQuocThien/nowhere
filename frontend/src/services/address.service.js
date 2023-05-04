@@ -8,6 +8,15 @@ class AddressService {
     async create(data) {
         return (await this.address.post("/", data)).data
     }
+
+    async get(city, district, ward) {
+        const data = {
+            'tinh': city,
+            'huyen': district,
+            'xa': ward
+        }
+        return (await this.address.post("/loc", data)).data
+    }
 }
 
 export default new AddressService()

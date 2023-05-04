@@ -17,7 +17,6 @@ class CustomerService {
 
     async login(email, pass) {
         const data = { 'email': email, 'pass': pass }
-        console.log(data)
         return (await this.customer.post("/dangnhap", data)).data
     }
 }
