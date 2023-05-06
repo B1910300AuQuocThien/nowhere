@@ -31,7 +31,8 @@ class OrderService {
             makh: payload.makh,
             ngay: payload.ngay,
             tongtien: payload.tongtien,
-            diachi: payload.diachi
+            diachi: payload.diachi,
+            sdt: payload.sdt,
         }
 
         Object.keys(order).forEach((key) => {
@@ -43,16 +44,29 @@ class OrderService {
     async createOrderDetail(payload) {
         const code = await this.getOrderCode()
         const orderDetail = this.extractOrderDetail(payload)
-        const result = await this.OrderDetail.findOneAndUpdate(
-            orderDetail,
-            {
-                $set: {
-                    mahoadon: code[0].madonhang
-                }
-            },
-            { returnDocument: "after", upsert: true }
-        )
-        return result.value
+        orderDetail.mahoadon = code[0].madonhang
+        console.log(orderDetail)
+
+        try {
+            const result = await this.OrderDetail.insertOne(
+                orderDetail, {})
+            return result.value
+
+        }
+        catch (e) {
+            console.log(e)
+            return null
+        }
+
+        // const result = await this.OrderDetail.findOneAndUpdate(
+        //     orderDetail,
+        //     {
+        //         $set: {
+        //             mahoadon: code[0].madonhang
+        //         }
+        //     },
+        //     { returnDocument: "after", upsert: true }
+        // )
     }
 
     async createOrder(payload) {
@@ -87,10 +101,54 @@ class OrderService {
                     foreignField: 'mahoadon',
                     as: "sanpham"
                 }
-            }]
-        )
+            },
+            {
+                $lookup: {
+                    from: 'trangthaidonhang',
+                    localField: 'trangthai',
+                    foreignField: 'matrangthai',
+                    as: 'trangthai'
+                }
+            }
+        ])
 
         return await cursor.toArray()
+    }
+
+    async getOrderByStatus(status) {
+        const cursor = await this.Order.aggregate([
+            {
+                $match: {
+                    $and: [{ trangthai: status }]
+                }
+            },
+            {
+                $lookup: {
+                    from: 'chitietdonhang',
+                    localField: 'madonhang',
+                    foreignField: 'mahoadon',
+                    as: 'sanpham'
+                }
+            }
+        ]
+        )
+        return await cursor.toArray()
+    }
+
+    async updateStatus(id, status) {
+        const filter = {
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null
+        }
+        const result = await this.Order.findOneAndUpdate(
+            filter,
+            {
+                $set: {
+                    trangthai: status
+                }
+            },
+            { returnDocument: "after" }
+        )
+        return result.value
     }
 }
 

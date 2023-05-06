@@ -27,9 +27,9 @@
                 </button>
             </div>
         </div>
-        <div class="mb-1 row " v-if="userInfor">
+        <div class="mb-1 row " v-if="user[0].admin == false">
             <div class="col-2"></div>
-            <div class="ml-1 row" v-if="!user[0].admin">
+            <div class="ml-1 row">
                 <div class="ml-3" v-for="category in categorys">
                     <router-link :to="{
                         name: 'sanphamtheodanhmuc',
@@ -47,8 +47,10 @@
                     </router-link>
                 </div>
             </div>
-
-            <div class="ml-1 row" v-else>
+        </div>
+        <div class="mb-1 row " v-if="user[0].admin == true">
+            <div class="col-2"></div>
+            <div class="ml-1 row">
                 <div class="ml-3" v-for="category in categorys">
                     <router-link :to="{
                         name: 'sanpham',
@@ -57,14 +59,14 @@
                         {{ category.ten }}
                     </router-link>
                 </div>
-                <div class="">
+                <!-- <div class="">
                     <router-link :to="{ name: 'giohang' }" tag="button" class="btn btn-dark ml-3">
                         Giỏ Hàng
                     </router-link>
                     <router-link :to="{ name: 'donhang' }" tag="button" class="btn btn-dark ml-3">
                         Đơn Hàng
                     </router-link>
-                </div>
+                </div> -->
             </div>
         </div>
         <hr>
@@ -119,7 +121,6 @@ export default {
             return this.user
         }
     },
-
 
 
 }

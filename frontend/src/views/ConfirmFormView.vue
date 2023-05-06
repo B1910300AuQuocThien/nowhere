@@ -29,7 +29,6 @@ export default {
         refersh() {
             this.getOrder()
             this.computeAlmount()
-            this.getAddress()
         },
         computeAlmount() {
             var orderKey = `order_${this.user[0].makh}`
@@ -39,17 +38,6 @@ export default {
             })
         },
 
-        async getAddress() {
-            var address = this.user[0].diachi
-            var city = address[0].capmot
-            var district = address[0].caphai
-            var ward = address[0].capba
-
-            var addressDetail = await addressService.get(city, district, ward)
-            this.addressDetail = addressDetail.ward + ' ' + addressDetail.district + ' ' + addressDetail.city
-            // console.log(this.addressDetail)
-        },
-
         async addOrder(emitPayload) {
             const date = new Date()
 
@@ -57,12 +45,13 @@ export default {
             let month = date.getMonth() + 1
             let year = date.getFullYear()
             let currentDate = `${day}-${month}-${year}`
-            console.log(currentDate)
+            console.log(emitPayload)
             var order = {
                 makh: emitPayload.user,
                 ngay: currentDate,
                 tongtien: emitPayload.almount,
-                diachi: emitPayload.diachi
+                diachi: emitPayload.address,
+                sdt: emitPayload.numberphone
             }
             await orderService.createOrder(order)
 
@@ -74,10 +63,17 @@ export default {
                 }
                 await orderService.createOrderDetail(orderDetail)
             })
-            console.log(emitPayload.orderList)
-            console.log(emitPayload)
-        }
+            this.reset()
 
+        },
+        reset() {
+            var orderKey = `order_${this.user[0].makh}`
+            this.order = []
+            this.$cookies.set(orderKey, this.order)
+            var cartKey = `cart_${this.user[0].makh}`
+            var cart = []
+            this.$cookies.set(cartKey, cart)
+        }
     },
     mounted() {
         this.refersh()

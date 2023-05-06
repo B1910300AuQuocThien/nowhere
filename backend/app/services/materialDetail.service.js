@@ -45,6 +45,11 @@ class MaterialDetailService {
         )
         return result.value
     }
+
+    async getDetail(id) {
+
+        const cursor = await this.MaterialDetailService.a
+    }
 }
 
 module.exports = MaterialDetailService

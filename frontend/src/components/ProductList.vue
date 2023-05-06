@@ -27,7 +27,7 @@ export default {
 
 <template>
     <div>
-        <table class="table w-50 ml-5 border">
+        <table class="table ml-5 border">
             <thead class="text-center bg-light">
                 <tr class="">
                     <td class="">STT</td>
@@ -62,6 +62,18 @@ export default {
                 </tr>
             </tbody>
         </table>
+        <div class="adminpanel text-center">
+            <hr>
+            <div class="col-4 mx-auto d-flex justify-content-around tool-bar">
+                <button class="btn btn-dark" @click="refreshList()">LÀM MỚI</button>
+                <router-link :to="{
+                    name: 'themmoi'
+                }">
+                    <button class="btn btn-dark">THÊM MỚI</button>
+                </router-link>
+                <button class="btn btn-dark" @click="removeAllProducts">XÓA TẤT CẢ</button>
+            </div>
+        </div>
     </div>
 </template>
 

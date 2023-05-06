@@ -4,7 +4,7 @@
             <h2>THÔNG TIN ĐƠN HÀNG</h2>
         </div>
         <div class=" d-flex justify-content-between">
-            <form action="" method="" class="col-5">
+            <Form action="" method="" class="col-5">
                 <div class="form-group">
                     <label class="form-label">Tên khách hàng</label>
                     <input class="form-control" type="text" v-model="user[0].tenkh">
@@ -20,31 +20,16 @@
                         <input class="form-control" type="email" v-model="user[0].email">
                     </div>
                 </div>
-                <div class="form-group row ml-2">
-                    <input type="radio" class="col-1 form-check-input" name="address" v-on:change="useAnotherAddress"
-                        checked>
-                    <label class="form-label col-10 h6">
-                        {{ addressDetail }}
-                    </label>
-                </div>
-                <div class="form-group row ml-2">
-                    <input type="radio" class="col-1 form-check-input" v-on:change="useAnotherAddress" name="address">
-                    <label class="form-check-label col-10">
-                        Sử dụng một địa chỉ khác
-                    </label>
-                </div>
-
-                <div class="form-group" :hidden=another>
+                <label class="form-label">Địa chỉ</label>
+                <div class="form-group">
                     <div class="row">
                         <div class="form-group col-4">
-                            <label class="form-label">Tỉnh</label>
                             <select class="form-select form-select form-control" id="city" v-model="addressLocal.tinh">
                                 <option value="">Tỉnh Thành</option>
                             </select>
                         </div>
 
                         <div class="form-group col-4">
-                            <label class="form-label">Quận Huyện</label>
                             <select class="form-select form-select form-control" id="districts"
                                 v-model="addressLocal.huyen">
                                 <option value="">Quận Huyện</option>
@@ -52,7 +37,6 @@
                         </div>
 
                         <div class="form-group col-4">
-                            <label class="form-label">Xã Phường</label>
                             <select class="form-select form-select form-control" id="wards" v-model="addressLocal.xa">
                                 <option value="">Xã Phường</option>
                             </select>
@@ -73,7 +57,8 @@
                 <div v-for="order in orders">
                     <OrderTitle :order="order" />
                 </div>
-                <div class="h4 mt-2" style="position: fixed; bottom: 0px">Thành tiền: {{ almount }}VND</div>
+                <div class="h4 mt-2 text-dark " style="position: fixed; bottom: 0px">Thành tiền: {{ almount }}VND
+                </div>
             </div>
         </div>
     </div>
@@ -84,13 +69,14 @@
 <script>
 import axios from 'axios';
 import OrderTitle from './OrderTitle.vue';
+import { Form } from 'vee-validate'
 export default {
     components: {
-        OrderTitle
+        OrderTitle,
+        Form
     },
     props: {
         address: { type: Object, required: true },
-        addressDetail: { type: String, required: true },
         orders: { type: Object, required: true },
         almount: { type: Number, required: true },
         user: { type: Object, required: true }
@@ -103,27 +89,18 @@ export default {
     },
     emits: ["add:order"],
     methods: {
-        useAnotherAddress() {
-            this.another ? this.another = false : this.another = true
-            // console.log(this.another)
-        },
         resetValue() {
             this.another = true
         },
-        orderNow() {
+        async orderNow() {
             var user = this.user[0]
             var order = this.orders
             var address = {}
             var almount = this.almount
-            if (!this.another) {
-                address = this.address
-            }
-            else {
-                address = this.user[0].diachi
-            }
-            console.log(address)
+            console.log(this.addressLocal)
 
-            this.$emit("add:order", { user: user.makh, orderList: order, address: address, almount: almount })
+            this.$emit("add:order", { user: user.makh, numberphone: user.sdt, address: this.addressLocal, orderList: order, almount: almount })
+            await this.$router.push({ name: 'choxacnhan' })
         }
     },
     mounted() {

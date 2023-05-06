@@ -58,3 +58,13 @@ exports.lastRe_2 = async () => {
         return document
     } catch (e) { return next(new ApiError(500, "loi")) }
 }
+
+exports.findAll = async (req, res, next) => {
+    try {
+        const customerService = new CustomerService(MongoDB.client)
+        const document = await customerService.getAll()
+        return res.send(document)
+    } catch (e) {
+        return next(new ApiError(500, 'loi'))
+    }
+}

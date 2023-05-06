@@ -1,6 +1,5 @@
 <template>
-    <SignupForm @submit:account="checkExitsAccount" :account="account" :customer="customer" :address="address"
-        @submit:customer="addCustomer" @signup:google="signupGoogle"></SignupForm>
+    <SignupForm @submit:account="addCustomer" :account="account" @signup:google="signupGoogle"></SignupForm>
 </template>
 
 <script>
@@ -21,21 +20,30 @@ export default {
     },
 
     methods: {
-        async checkExitsAccount(emitPayload) {
-            // console.log(emitPayload)
-            const result = await CustomerService.checkExitsAcc(emitPayload.email)
+        async checkExitsAccount(email) {
+            const result = await CustomerService.checkExitsAcc(email)
             return result
         },
 
-        async addCustomer(emitPayload) {
-            if (!this.checkExitsAccount(emitPayload.account.email) == []) {
+        async addCustomer(account) {
+            var check = await this.checkExitsAccount(account.email)
+            console.log(check.length)
+            if (check.length == 0) {
                 try {
-                    await CustomerService.create(emitPayload.account, emitPayload.customerDetail)
-                    await AddressService.create(emitPayload.address)
+                    var user = await CustomerService.create(account)
+                    var temp = []
+                    temp.push(user)
+                    this.$cookies.set('user', temp)
+                    this.$router.push({ name: 'trangchu' })
+                    location.reload()
+
                 }
                 catch (error) {
                     console.log(error)
                 }
+            }
+            else {
+                alert('tai khoan ton tai')
             }
         },
 
@@ -43,16 +51,22 @@ export default {
             console.log(emitPayload)
             const user = await this.$gAuth.signIn()
             const exitsAcc = await CustomerService.checkExitsAcc(user.wv.iw)
-            if (!exitsAcc[0]) {
-
-                this.$cookies.set('user', exitsAcc)
+            console.log(user.getBasicProfile())
+            if (exitsAcc.length == 0) {
+                var userLogin = {
+                    tenkh: user.getBasicProfile().ZZ,
+                    email: user.getBasicProfile().iw,
+                    matkhau: ''
+                }
+                var temp = []
+                temp.push(userLogin)
+                await CustomerService.create(userLogin)
+                this.$cookies.set('user', temp)
                 console.log(this.$cookies.get('user'))
                 await this.$router.push({ name: 'trangchu' })
                 location.reload()
             }
         }
-
-
     }
 
 }

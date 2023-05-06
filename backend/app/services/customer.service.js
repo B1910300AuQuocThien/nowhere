@@ -9,13 +9,7 @@ class CustomerService {
     extracConnactData(payload) {
         const customer = {
             email: payload.email,
-            makh: payload.sub,
             tenkh: payload.name,
-            gioitinh: payload.genders,
-            ngaysinh: payload.birthdays,
-            sdt: payload.numberphone,
-            madiachi: payload.addressCode,
-            tennguoidung: payload.username,
             matkhau: payload.password
         }
 
@@ -34,6 +28,7 @@ class CustomerService {
                 $set: {
                     trangthai: "kich hoat",
                     admin: false,
+                    makh: `user_${Date.now()}`
                 }
             },
             { returnDocument: "after", upsert: true })
@@ -46,14 +41,6 @@ class CustomerService {
             {
                 $match: { email: filter }
             },
-            {
-                $lookup: {
-                    from: 'chitietdiachi',
-                    localField: 'email',
-                    foreignField: 'makh',
-                    as: 'diachi'
-                }
-            },
         ])
         return await cursor.toArray()
     }
@@ -63,15 +50,6 @@ class CustomerService {
             {
                 $match: { $and: [{ email: email }, { matkhau: pass }] }
             },
-            {
-                $lookup: {
-                    from: 'chitietdiachi',
-                    localField: 'email',
-                    foreignField: 'makh',
-                    as: 'diachi'
-                }
-            },
-
         ])
 
         return await result.toArray()
@@ -79,6 +57,11 @@ class CustomerService {
 
     async lastRecord() {
         const cursor = await this.Customer.find().sort({ _id: -1 }).limit(1)
+        return await cursor.toArray()
+    }
+
+    async getAll() {
+        const cursor = await this.Customer.find({})
         return await cursor.toArray()
     }
 }

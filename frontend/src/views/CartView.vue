@@ -131,7 +131,8 @@ export default {
                 var orderProduct = this.$cookies.get(orderKey)
                 this.$router.push({ name: 'xacnhan' })
             }
-        }
+        },
+
     },
 
     mounted() {

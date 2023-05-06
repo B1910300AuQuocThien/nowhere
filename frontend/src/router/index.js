@@ -2,6 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import adminview from '../views/admin/Adminview.vue'
 import addProduct from '../views/admin/AddProduct.vue'
 import classify from '../views/admin/ClassifyView.vue'
+import orderList from '../views/admin/OrderListView.vue'
+import productList from '../views/admin/ProductListView.vue'
+import userlist from '../views/admin/UserListView.vue'
+
 import signup from '../views/SignupView.vue'
 import home from '../views/HomeView.vue'
 import productdetail from '../views/ProductDetailView.vue'
@@ -48,6 +52,7 @@ const router = createRouter({
       children: [
         {
           path: "/donhang/choxacnhan",
+          name: 'choxacnhan',
           component: confirm
         },
         {
@@ -76,19 +81,46 @@ const router = createRouter({
       component: productdetail,
       props: true
     },
+
+
     {
       path: "/admin",
-      name: "productlist",
-      component: adminview
-    },
-    {
-      path: "/sanpham/danhmuc/:id",
-      name: "sanpham",
+      name: "adminlogin",
       component: adminview,
-      props: true,
+      children: [
+        {
+          path: '/admin/donhang',
+          component: orderList,
+          name: 'quanlidonhang'
+        },
+        {
+          path: '/admin/danhmuc',
+          component: classify,
+          name: 'quanlidanhmuc',
+          children: [
+            {
+              path: '/admin/danhmuc/danhmuc',
+              component: classify,
+              props: true
+            }
+          ]
+        },
+        {
+          path: '/admin/nguoidung',
+          component: userlist,
+          name: 'quanlinguoidung'
+        },
+        {
+          path: "/admin/sanpham/danhmuc/:id",
+          name: "sanpham",
+          component: productList,
+          props: true,
+        },
+      ]
     },
+
     {
-      path: "/sanpham/tuychinh",
+      path: "/admin/sanpham/tuychinh",
       name: "tuychinh",
       component: adminview
     },
@@ -103,18 +135,14 @@ const router = createRouter({
       component: signin
     },
     {
-      path: "/sanpham/themmoi/:id",
+      path: "/admin/sanpham/themmoi/:id",
       name: "themmoi",
       component: addProduct,
       props: true
     },
+
     {
-      path: "/sanpham/themmoi/danhmuc",
-      name: "themoidanhmuc",
-      component: classify
-    },
-    {
-      path: "/danhmuc/themmoi/:id",
+      path: "/admin/danhmuc/themmoi/:id",
       name: "themmoidanhmuc",
       component: classify,
       props: true

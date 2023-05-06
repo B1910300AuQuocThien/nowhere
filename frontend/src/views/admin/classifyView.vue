@@ -1,13 +1,11 @@
 <template>
-    <div class="row">
-        <div class="col-3 d-flex flex-column mt-5">
-            <button class="btn btn-primary w-50 mx-auto my-2">Phân Loại</button>
-            <button class="btn btn-primary w-50 mx-auto my-2">Danh mục</button>
-            <button class="btn btn-primary w-50 mx-auto my-2">Chất Liệu</button>
-            <button class="btn btn-primary w-50 mx-auto my-2" @click="goBack">Quay về</button>
-
+    <div class="">
+        <div class="row col-9 mx-auto ">
+            <button class="btn btn-primary mr-2" @click="get($event)" value="danhmuc">Danh mục</button>
+            <button class="btn btn-primary mr-2" @click="get($event)" value="chatlieu">Chất liệu</button>
+            <button class="btn btn-primary" @click="get($event)" value="phanloai">Phân loại</button>
         </div>
-        <div class="col-9">
+        <div class="ml-3">
             <ClassifyList :values="values" :name="names" @submit:classify="addClassify" :classify="classify"
                 @delete:classifyId="deleteClassify" />
         </div>
@@ -30,9 +28,10 @@ export default {
         }
     },
     methods: {
-        async refeshList() {
-            const value = this.$route.params.id
+        async get(e) {
+            const value = e.target.value
             console.log(value)
+
             if (value == "danhmuc") {
                 this.values = await categoryService.getAll()
                 this.names = "DANH MỤC"
@@ -74,7 +73,7 @@ export default {
             catch (error) {
                 console.log(error)
             }
-            this.refeshList()
+            this.get()
         },
 
         async deleteClassify(emitPayload) {
@@ -98,11 +97,11 @@ export default {
             catch (error) {
                 console.log(error)
             }
-            this.refeshList()
+            this.get()
         }
     },
     mounted() {
-        this.refeshList()
+        this.get()
     }
 
 }
