@@ -68,3 +68,55 @@ exports.findAll = async (req, res, next) => {
         return next(new ApiError(500, 'loi'))
     }
 }
+
+exports.delete = async (req, res, next) => {
+    try {
+        const customerService = new CustomerService(MongoDB.client)
+        const document = await customerService.delete(req.params.id)
+        console.log(req.params.id)
+        if (!document) {
+            return next(new ApiError(404, 'user not found'))
+        }
+        return res.send({ message: 'user was delete successfuly' })
+    }
+    catch (e) {
+        return next(new ApiError(500, 'could not delete user'))
+    }
+}
+
+exports.updateStatus = async (req, res, next) => {
+    try {
+        const customerService = new CustomerService(MongoDB.client)
+        const document = await customerService.updateStatus(req.body.id, req.body.newStatus)
+        if (!document) {
+            return next(new ApiError(404, 'user not found'))
+        }
+        return res.send({ message: 'success' })
+    } catch (e) {
+        return next(new ApiError(500, 'fail'))
+    }
+}
+
+exports.updateUser = async (req, res, next) => {
+    try {
+        const customerService = new CustomerService(MongoDB.client)
+        const document = await customerService.updateUser(req.params.id, req.body)
+        if (!document) {
+            return next(new ApiError(404, 'user not found'))
+        }
+        return res.send({ message: 'success' })
+    } catch (e) {
+        return next(new ApiError(500, 'loi'))
+    }
+}
+
+exports.findById = async (req, res, next) => {
+    try {
+        const customerService = new CustomerService(MongoDB.client)
+        const document = await customerService.getById(req.params.id)
+        console.log(document)
+        return res.send(document)
+    } catch (e) {
+        return next(new ApiError(500, 'loi'))
+    }
+}

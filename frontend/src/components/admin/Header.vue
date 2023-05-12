@@ -9,8 +9,8 @@
                 </router-link>
             </div>
             <div class="form-group row col-6 text-center">
-                <input type="text" name="search" class="form-control col-8">
-                <button class="btn btn-dark col-3 ml-1">tìm kiếm</button>
+                <input type="text" name="search" class="form-control col-8" v-model="searchText">
+                <button class="btn btn-dark col-3 ml-1" @click="search">Tìm kiếm</button>
             </div>
 
             <div class="col-3 text-center d-flex justify-content-end form-group" v-if="!userInfor">
@@ -101,9 +101,11 @@ export default {
     },
     data() {
         return {
-            user: ''
+            user: '',
+            searchText: ''
         }
     },
+    emits: ["search"],
     methods: {
         async logout() {
             this.$cookies.remove('user')
@@ -113,6 +115,9 @@ export default {
         getUserInfo() {
             this.user = this.$cookies.get('user')
             console.log(this.user)
+        },
+        search() {
+            this.$emit("search", this.searchText)
         }
     },
     computed: {

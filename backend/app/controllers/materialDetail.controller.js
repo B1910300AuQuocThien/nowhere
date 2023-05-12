@@ -14,3 +14,24 @@ exports.create = async (req, res, next) => {
         return next(new ApiError(500, 'loi rui'))
     }
 }
+
+exports.updateQuantity = async (req, res, next) => {
+    try {
+        const materialDetail = new MaterialDetailService(MongoDB.client)
+        const document = await materialDetail.updateQuantity(req.body.soluong, req.body.id)
+        // console.log(document)
+        return res.send(document)
+    } catch (error) {
+        return next(new ApiError(500, 'loi'))
+    }
+}
+
+exports.getById = async (req, res, next) => {
+    try {
+        const materialDetail = new MaterialDetailService(MongoDB.client)
+        const document = await materialDetail.getById(req.body.id)
+        return res.send(document)
+    } catch (e) {
+        return next(new ApiError(500, 'loi'))
+    }
+}

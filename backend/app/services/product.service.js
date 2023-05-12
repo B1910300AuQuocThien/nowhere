@@ -84,6 +84,15 @@ class ProductService {
 
             {
                 $lookup: {
+                    from: 'danhgia',
+                    localField: 'masp',
+                    foreignField: 'masp',
+                    as: 'danhgia'
+                }
+            },
+
+            {
+                $lookup: {
                     from: 'chitietchatlieu',
                     let: { "ma_chitiet": "$machitiet" },
                     pipeline: [
@@ -151,6 +160,14 @@ class ProductService {
                     foreignField: "ma",
                     as: "danhmuc"
                 },
+            },
+            {
+                $lookup: {
+                    from: 'danhgia',
+                    localField: 'masp',
+                    foreignField: 'masp',
+                    as: 'danhgia'
+                }
             },
 
             {
@@ -244,6 +261,14 @@ class ProductService {
                     localField: "hinhanh",
                     foreignField: "files_id",
                     as: "hinhanh"
+                }
+            },
+            {
+                $lookup: {
+                    from: 'danhgia',
+                    localField: 'masp',
+                    foreignField: 'masp',
+                    as: 'danhgia'
                 }
             },
             {

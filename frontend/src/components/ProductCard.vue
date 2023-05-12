@@ -31,8 +31,8 @@ export default {
                     <div class="">
                         <div class="single-product product-1">
                             <div class="part-1">
-                                <!-- <img :src="`data:jpg;base64,${product.hinhanh[0].data}`" class="img-fluid"> -->
-                                <img src="../assets/8d0233044585f2992e20e012e15e4aaf.jpg" class="img-fluid img-product">
+                                <img :src="`data:jpg;base64,${product.hinhanh[0].data}`" class="img-fluid">
+                                <!-- <img src="../assets/8d0233044585f2992e20e012e15e4aaf.jpg" class="img-fluid img-product"> -->
                                 <ul>
                                     <li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
                                     <li><a href="#"><i class="fas fa-heart"></i></a></li>
@@ -41,9 +41,9 @@ export default {
                             </div>
                             <div class="part-2">
                                 <router-link :to="{
-                                        name: 'chitietsanpham',
-                                        params: { id: product.masp }
-                                    }" class="product-title block">
+                                    name: 'chitietsanpham',
+                                    params: { id: product.masp }
+                                }" class="product-title block">
                                     {{ product.ten }}
                                 </router-link>
                                 <h4 class="product-price mr-4">Giá: {{ product.chitiet[0].giahientai }} VND</h4>

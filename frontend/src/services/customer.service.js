@@ -22,6 +22,23 @@ class CustomerService {
     async getAll() {
         return (await this.customer.get("/")).data
     }
+
+    async delete(id) {
+        return (await this.customer.delete(`/${id}`)).data
+    }
+
+    async updateStatus(data) {
+        return (await this.customer.post('/capnhat', data)).data
+    }
+
+    async getById(id) {
+        return (await this.customer.get(`/nguoidung/${id}`)).data
+    }
+
+    async updateUser(id, data) {
+        console.log(data)
+        return (await this.customer.post(`/capnhatnguoidung/${id}`, data)).data
+    }
 }
 
 export default new CustomerService()

@@ -6,7 +6,7 @@ export default {
     },
     data() {
         return {
-            quantity: this.cart.quantity.quanity,
+            quantity: this.cart.quantity,
             product: {},
             price: 0,
             image: '',
@@ -56,7 +56,7 @@ export default {
             }
 
             console.log(this.active)
-            this.cart.quantity.quanity = this.quantity
+            this.cart.quantity = this.quantity
             this.cart.price = this.price
             this.$emit("add:product", this.cart)
         },
@@ -80,7 +80,7 @@ export default {
     <div>
         <div v-if="cart">
             <div class="shopping-cart" :class="classActive">
-                <div class="item">
+                <div class="item column">
                     <div class="row">
                         <div class="col-5">
                             <!-- <img src="../assets/8d0233044585f2992e20e012e15e4aaf.jpg" alt="" class="img-fluid w-75" /> -->
@@ -88,35 +88,34 @@ export default {
                             <!-- <p>{{ product.hinhanh }}</p> -->
                         </div>
                         <div class="col-5">
-                            <div class="h5">{{ product.ten }}</div>
+                            <div class="h5 text">{{ product.ten }}</div>
                             <div class="">{{ tag.danhmuc }}</div>
                             <div class="">{{ tag.mau }}</div>
                             <div class="">{{ tag.chatlieu }}</div>
                         </div>
-                        <div class="delete col-2 btn btn-danger h-25" @click="deleteProduct">
-                            Xóa
+                        <div class="option column">
+                            <div class="delete btn btn-danger" @click="deleteProduct">
+                                Xóa
+                            </div>
+                            <div class="select btn btn-primary" @click="addToPreOder" v-if="!active">
+                                Chọn
+                            </div>
+                            <div class="select btn btn-primary" @click="addToPreOder" v-else>
+                                Bỏ
+                            </div>
                         </div>
-                        <div class="select col-2 btn btn-primary h-25" @click="addToPreOder" v-if="!active">
-                            Chọn
-                        </div>
-                        <div class="select col-2 btn btn-primary h-25" @click="addToPreOder" v-else>
-                            Bỏ
-                        </div>
-
                     </div>
-                    <div class="row">
+                    <div class="row ">
                         <div class="quantity col-6">
-
                             <button class="minus-btn" type="button" @click="minus">
                                 <i class="fa-solid fa-minus"></i>
                             </button>
-                            <input type="text" name="name" :value="`${quantity}`">
+                            <input type="text" name="name" :value="`${quantity}`" class="border rounded-pill">
                             <button class="plus-btn" type="button" @click="plus">
                                 <i class="fa-solid fa-plus"></i>
                             </button>
                         </div>
-                        <div class="total-price col-6 h6 text-end">{{ price }} VND</div>
-
+                        <div class="total-price text-end col-6 h5">Giá: {{ price }} VND</div>
                     </div>
                 </div>
             </div>
@@ -126,7 +125,7 @@ export default {
 <style scoped>
 .shopping-cart {
     width: 460px;
-    height: 200px;
+    height: 220px;
     margin: 10px 15px;
     padding: 10px;
     background: #ffffff;
@@ -147,6 +146,15 @@ export default {
     animation-fill-mode: forwards;
 }
 
+.text {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* number of lines to show */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
 @keyframes animate {
     0% {
         background-position: left;
@@ -161,24 +169,21 @@ export default {
     }
 }
 
-.item {
+.option {
     position: relative;
 }
 
 .delete {
+    position: absolute;
+    width: 78.3281px;
     box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.5);
 }
 
 .select {
-    position: relative;
-    top: -50px;
-    left: 391px;
-    box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.5);
-}
-
-.quantity {
     position: absolute;
-    top: 150px;
+    top: 50px;
+    box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.5);
+    width: 78.3281px;
 }
 
 .quantity input {
@@ -191,6 +196,7 @@ export default {
     font-weight: 300;
     border-radius: 3px;
     margin: 0 5px;
+
 }
 
 button[class*=btn] {
@@ -215,12 +221,7 @@ input:focus {
 
 .total-price {
     text-align: center;
-    font-size: 16px;
-    color: #43484D;
-    font-weight: 300;
-    position: absolute;
-    top: 150px;
-    left: 210px;
+    color: #000000;
 }
 </style>
 

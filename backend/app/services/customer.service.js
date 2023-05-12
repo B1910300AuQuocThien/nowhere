@@ -26,7 +26,7 @@ class CustomerService {
             customer,
             {
                 $set: {
-                    trangthai: "kich hoat",
+                    trangthai: true,
                     admin: false,
                     makh: `user_${Date.now()}`
                 }
@@ -63,6 +63,50 @@ class CustomerService {
     async getAll() {
         const cursor = await this.Customer.find({})
         return await cursor.toArray()
+    }
+
+    async delete(id) {
+        const result = await this.Customer.findOneAndDelete({
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null
+        })
+
+        return result.value
+    }
+
+    async updateStatus(id, newStatus) {
+        const filter = {
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null
+        }
+
+        const result = await this.Customer.findOneAndUpdate(
+            filter,
+            { $set: { trangthai: newStatus } },
+            { returnDocument: "after" }
+        )
+
+        return result.value
+    }
+
+    async updateUser(id, payload) {
+        const filter = {
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null
+        }
+        const update = this.extracConnactData(payload)
+        console.log(update)
+        const result = await this.Customer.findOneAndUpdate(
+            filter,
+            { $set: update },
+            { returnDocument: "after" }
+        )
+
+        return result.value
+    }
+
+    async getById(id) {
+        console.log(id)
+        return await this.Customer.findOne({
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null
+        })
     }
 }
 

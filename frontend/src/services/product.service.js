@@ -33,6 +33,7 @@ class ProductService {
     async delete(id) {
         return (await this.product.delete(`/${id}`)).data
     }
+
 }
 
 export default new ProductService()

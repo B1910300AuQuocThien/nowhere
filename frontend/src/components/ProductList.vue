@@ -8,8 +8,13 @@ export default {
         deleteProduct(_id) {
             this.$emit("delete:productId", { id: _id })
         },
-        getProductQuantity() {
-            console.log(this.product)
+        getProductQuantity(index) {
+            var quantity = 0
+            var temp = this.product[index]
+            temp.chitiet.forEach((e) => {
+                quantity = quantity + e.soluong
+            })
+            return quantity
         }
     },
     data() {
@@ -17,8 +22,9 @@ export default {
             quantity: 0
         }
     },
+
     mounted() {
-        this.getProductQuantity()
+        this.getProductQuantity
     }
 
 }
@@ -51,7 +57,7 @@ export default {
                     <td class="">{{ product.ten }}</td>
                     <td v-if="product.trangthai === true">hiện</td>
                     <td v-else>ẩn</td>
-                    <td>{{ quantity }}</td>
+                    <td>{{ getProductQuantity(index) }}</td>
 
                     <td>
                         <button class="btn btn-primary">SỬA</button>

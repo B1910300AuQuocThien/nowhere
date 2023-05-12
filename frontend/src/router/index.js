@@ -5,6 +5,8 @@ import classify from '../views/admin/ClassifyView.vue'
 import orderList from '../views/admin/OrderListView.vue'
 import productList from '../views/admin/ProductListView.vue'
 import userlist from '../views/admin/UserListView.vue'
+import rateList from '../views/admin/RateListView.vue'
+import userForm from '../views/admin/UserFormView.vue'
 
 import signup from '../views/SignupView.vue'
 import home from '../views/HomeView.vue'
@@ -108,7 +110,13 @@ const router = createRouter({
         {
           path: '/admin/nguoidung',
           component: userlist,
-          name: 'quanlinguoidung'
+          name: 'quanlinguoidung',
+        },
+        {
+          path: '/admin/nguoidung/:id',
+          component: userForm,
+          name: 'capnhatnguoidung',
+          props: true
         },
         {
           path: "/admin/sanpham/danhmuc/:id",
@@ -116,6 +124,11 @@ const router = createRouter({
           component: productList,
           props: true,
         },
+        {
+          path: '/admin/danhgia',
+          name: 'quanlidanhgia',
+          component: rateList
+        }
       ]
     },
 

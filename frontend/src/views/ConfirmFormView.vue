@@ -6,6 +6,7 @@
 <script>
 import ConfirmForm from '../components/ConfirmForm.vue';
 import addressService from '../services/address.service';
+import materialDetailService from '../services/materialDetail.service';
 import orderService from '../services/order.service'
 export default {
     components: {
@@ -58,10 +59,20 @@ export default {
             emitPayload.orderList.forEach(async (orderItem) => {
                 var orderDetail = {
                     machitiet: orderItem.detail.machitiet,
-                    soluong: orderItem.quantity.quanity,
+                    soluong: orderItem.quantity,
                     gia: orderItem.price
                 }
+                console.log(orderDetail)
+                var materialDetail = await materialDetailService.getById({ id: orderDetail.machitiet })
+                var new_quantity = parseInt(materialDetail[0].soluong) - parseInt(orderDetail.soluong)
+                console.log(materialDetail)
+                var data = {
+                    soluong: new_quantity,
+                    id: materialDetail._id
+                }
+                console.log(data)
                 await orderService.createOrderDetail(orderDetail)
+                await materialDetailService.updateQuantity(data)
             })
             this.reset()
 

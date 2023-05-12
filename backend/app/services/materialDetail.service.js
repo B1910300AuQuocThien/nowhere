@@ -46,9 +46,38 @@ class MaterialDetailService {
         return result.value
     }
 
-    async getDetail(id) {
+    // async getDetail(id) {
 
-        const cursor = await this.MaterialDetailService.a
+    //     const cursor = await this.MaterialDetailService.a
+    // }
+
+    async updateQuantity(quantity, id) {
+        const filter = {
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null
+        }
+        const result = await this.MaterialDetailService.findOneAndUpdate(
+            filter,
+            {
+                $set: {
+                    soluong: quantity
+                }
+            },
+            { returnDocument: "after" }
+        )
+
+        return result.value
+    }
+
+    async getById(id) {
+        const result = await this.MaterialDetailService.aggregate([
+            {
+                $match: {
+                    $and: [{ machitiet: id }]
+                }
+            }]
+        )
+
+        return await result.toArray()
     }
 }
 

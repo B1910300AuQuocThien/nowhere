@@ -82,15 +82,15 @@ export default {
             }
             else {
                 const idDetail = cart.detail.machitiet
-                const quantityDetail = cart.quantity.quanity
+                const quantityDetail = cart.quantity
                 if (this.exitsProduct(cart.detail.machitiet, orderKey)) {
                     var removeIndex = 0
                     orderItem.forEach((e, index) => {
-                        if (idDetail == e.detail.machitiet && quantityDetail == e.quantity.quanity) {
+                        if (idDetail == e.detail.machitiet && quantityDetail == e.quantity) {
                             removeIndex = index
                         }
                         if (idDetail == e.detail.machitiet) {
-                            e.quantity.quanity = quantityDetail
+                            e.quantity = quantityDetail
                         }
                     })
                     orderItem.splice(removeIndex, 1)
@@ -115,7 +115,7 @@ export default {
         computeAlmount(order) {
             var totalAlmount = 0
             order.forEach((e) => {
-                var almount = e.detail.giahientai * e.quantity.quanity
+                var almount = e.detail.giahientai * e.quantity
                 totalAlmount = totalAlmount + almount
             })
             this.totalAlmount = totalAlmount

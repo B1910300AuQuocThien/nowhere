@@ -2,15 +2,18 @@
     <div class="cart">
         <h3 class="text-center h2">GIỎ HÀNG</h3>
 
-        <div v-if="carts" class="row mx-auto">
-            <div v-for="cart in carts" class="">
-                <CartTitle :cart="cart" @delete:product="deleteProduct" @add:product="addProduct" />
+        <div class="row">
+
+            <div v-if="carts" class="row mx-auto col-9">
+                <div v-for="cart in carts" class="">
+                    <CartTitle :cart="cart" @delete:product="deleteProduct" @add:product="addProduct" />
+                </div>
             </div>
-        </div>
-        <div class="bottom-bar rounded" v-if="carts.length != 0">
-            <div class="row w-75 mx-auto bg-dark">
-                <div class="col-8 h6 mt-2">Thành tiền: {{ almount }}VND</div>
-                <button class="col-4 text-end btn btn-primary" @click="order">Đặt Hàng</button>
+            <div class="bottom-bar rounded col-3" v-if="carts.length != 0">
+                <div class="">
+                    <div class="h6">Thành tiền: {{ almount }}VND</div>
+                    <button class="text-end btn btn-primary" @click="order">Đặt Hàng</button>
+                </div>
             </div>
         </div>
 
@@ -58,8 +61,9 @@ export default {
 }
 
 .bottom-bar {
-    position: fixed;
-    bottom: 0px;
+    position: static;
+    top: 0px;
+    left: 0px;
     width: 100%;
 }
 </style>

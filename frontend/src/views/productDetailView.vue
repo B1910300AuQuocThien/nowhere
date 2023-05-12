@@ -1,12 +1,13 @@
 <template>
     <div>
-        <ProductDetail :products="returnProduct" :quantity="quantity" @addtoCard:productID="addToCart" />
+        <ProductDetail :products="returnProduct" @addtoCard:productID="addToCart" @addRate:rate="addRate" />
     </div>
 </template>
 
 <script>
 import ProductDetail from '../components/ProductDetail.vue';
 import productService from '../services/product.service';
+import rateService from '../services/rate.service';
 export default {
     components: {
         ProductDetail
@@ -14,12 +15,11 @@ export default {
     data() {
         return {
             product: {},
-            quantity: {}
         }
     },
     methods: {
         addToCart(emitPayload) {
-
+            console.log(emitPayload)
             var user = this.$cookies.get('user')
 
             if (user == null) {
@@ -65,6 +65,7 @@ export default {
         async getProduct() {
             try {
                 this.product = await productService.get(this.$route.params.id)
+                console.log(this.product)
             }
             catch (error) {
                 console.log(error);
@@ -73,6 +74,16 @@ export default {
 
         refreshList() {
             this.getProduct()
+        },
+
+        async addRate(emitPayload) {
+            console.log(emitPayload)
+            try {
+                await rateService.create(emitPayload)
+            } catch (e) {
+                console.log(e)
+            }
+            location.reload()
         }
     },
     mounted() {

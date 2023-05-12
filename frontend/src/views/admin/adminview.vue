@@ -24,6 +24,12 @@
                         <p>Quản lí người dùng</p>
                     </router-link>
                 </li>
+                <li class="nav-item">
+                    <router-link :to="{ name: 'quanlidanhgia' }" class=" btn btn-dark mb-2" style="width: 200px;">
+                        <p>Quản lí đánh giá</p>
+                    </router-link>
+                </li>
+
             </ul>
         </nav>
         <div class="col-9 mt-2">
