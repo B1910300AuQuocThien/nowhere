@@ -35,7 +35,9 @@ export default {
 
     methods: {
         async getOrderItem() {
-            this.orders = await orderService.orderStatus('DNH')
+            var userId = this.$cookies.get('user')[0].makh
+            console.log(userId)
+            this.orders = await orderService.orderStatus(userId, { status: 'DNN' })
             console.log(this.orders)
         }
     },

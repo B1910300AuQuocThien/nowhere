@@ -21,8 +21,8 @@ class OrderService {
         return (await this.order.post("/chitietdonhang", data)).data
     }
 
-    async orderStatus(status) {
-        return (await this.order.get(`/${status}`)).data
+    async orderStatus(id, status) {
+        return (await this.order.post(`/${id}`, status)).data
     }
 
     async updateStatus(id, status) {

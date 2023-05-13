@@ -1,5 +1,9 @@
 <script>
+import Footer from './Footer.vue'
 export default {
+    components: {
+        Footer
+    },
     props: {
         product: { type: Array, default: [] },
     },
@@ -55,7 +59,7 @@ export default {
                         <!-- {{ product.hinhanh[0].data }} -->
                     </td>
                     <td class="">{{ product.ten }}</td>
-                    <td v-if="product.trangthai === true">hiện</td>
+                    <td v-if="product.trangthai === 'true'">hiện</td>
                     <td v-else>ẩn</td>
                     <td>{{ getProductQuantity(index) }}</td>
 
@@ -70,7 +74,7 @@ export default {
         </table>
         <div class="adminpanel text-center">
             <hr>
-            <div class="col-4 mx-auto d-flex justify-content-around tool-bar">
+            <div class="col-5 mx-auto d-flex justify-content-around tool-bar mb-5">
                 <button class="btn btn-dark" @click="refreshList()">LÀM MỚI</button>
                 <router-link :to="{
                     name: 'themmoi'

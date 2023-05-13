@@ -115,11 +115,11 @@ class OrderService {
         return await cursor.toArray()
     }
 
-    async getOrderByStatus(status) {
+    async getOrderByStatus(id, status) {
         const cursor = await this.Order.aggregate([
             {
                 $match: {
-                    $and: [{ trangthai: status }]
+                    $and: [{ trangthai: status }, { makh: id }]
                 }
             },
             {

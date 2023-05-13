@@ -51,7 +51,7 @@ exports.getAll = async (req, res, next) => {
 exports.getOrderByStatus = async (req, res, next) => {
     try {
         const orderService = new OrderService(MongoDB.client)
-        const document = await orderService.getOrderByStatus(req.params.id)
+        const document = await orderService.getOrderByStatus(req.params.id, req.body.status)
         return res.send(document)
     } catch (e) {
         return next(new ApiError(500, 'loi'))

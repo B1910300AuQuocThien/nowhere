@@ -36,12 +36,16 @@
             <router-view></router-view>
         </div>
     </div>
+    <div class="footer">
+
+        <FooterVue></FooterVue>
+    </div>
     <!-- <ProductList :product="filteredProduct" @delete:productId="deleteProduct" /> -->
 </template>
 
-<style>
-.adminpanel {
-    position: fixed;
+<style scoped>
+.footer {
+    position: static;
     bottom: 0px;
     width: 100%;
 }
@@ -50,11 +54,12 @@
 <script>
 import Header from '../../components/admin/Header.vue';
 import ProductList from '../../components/ProductList.vue';
-import ProductService from '../../services/product.service'
+import FooterVue from '../../components/Footer.vue';
 export default {
     components: {
         ProductList,
-        Header
+        Header,
+        FooterVue
     },
 
     // props: {
